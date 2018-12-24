@@ -28,9 +28,9 @@ class Linear_Reg():
 		alpha is the learning rate and stop is the smallest gradient limit
 		"""
 		while True:
-			print("Current cost = ",cost_function())
+			print("Current cost = ",self.cost_function())
 			old_t = self.t
-			self.t = self.t - (alpha/self.m)*matmul(np.transpose(self.x),(self.hypo - self.y))    #descent
+			self.t = self.t - (alpha/self.m)*np.matmul(np.transpose(self.x),(self.hypo - self.y))    #descent
 			cond = (np.abs(old_t - self.t) > stop)
 			if not cond.any():                                                #stopping condition
 				print("gradient is small so the process is stopped")
@@ -55,4 +55,23 @@ class Linear_Reg():
 		deno = np.inverse(np.matmul(x_trans,self.x))
 		numer = np.matmul(x_trans,self.y)
 		self.t = np.matmul(deno,numer)
+		return self.t
+
+	@np.vectorize
+	def regularisation(self,l = 100, alpha = 0.01, stop = 0.001):
+		"""
+		Regularizing to prevent overfitting
+		regularization by shrinking parameters
+		"""
+		
+		while True:
+			self.cost = self.cost_function()+(l/(2*self.m))*np.sum(self.t[1:,]**2)
+			print("Cost at current state: ",self.cost)
+			old_t = self.t
+			self.t = self.t - (alpha/self.m)*np.matmul(np.transpose(self.x),(self.hypo-self.y))   #gradient calculation
+			self.t[1:,] = self.t[1:,] - (alpha/self.m)*l*old_t[1:,]
+			cond = (np.abs(old_t - self.t) > stop)
+			if not cond.any():                                                #stopping condition
+				print("gradient is small so the process is stopped")
+				break
 		return self.t
