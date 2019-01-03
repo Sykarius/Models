@@ -1,5 +1,5 @@
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 
 class Linear_Reg():
@@ -42,8 +42,8 @@ class Linear_Reg():
 		"""
 		Feature scaling using mean normalization method
 		"""
-		avg = np.mean(self.x, axis = 0)  #avg
-		ran = np.max(self.x, axis = 0)-np.min(self.x, axis = 0) #range
+		self.avg = np.mean(self.x, axis = 0)  #avg
+		self.ran = np.max(self.x, axis = 0)-np.min(self.x, axis = 0) #range
 		self.x = (self.x - avg)/ran
 
 	@np.vectorize
@@ -75,3 +75,5 @@ class Linear_Reg():
 				print("gradient is small so the process is stopped")
 				break
 		return self.t
+
+
