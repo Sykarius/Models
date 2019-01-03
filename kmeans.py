@@ -69,6 +69,7 @@ class Kmeans():
 			cost_vals.append(self.cost_function())
 
 		ax.plot(k_vals,cost_vals,linewidth = 3, color = 'k')
+		plt.show()
 
 
 
