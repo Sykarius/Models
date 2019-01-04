@@ -44,7 +44,7 @@ class Linear_Reg():
 		"""
 		self.avg = np.mean(self.x, axis = 0)  #avg
 		self.ran = np.max(self.x, axis = 0)-np.min(self.x, axis = 0) #range
-		self.x = (self.x - avg)/ran
+		self.x = (self.x - self.avg)/self.ran
 
 	@np.vectorize
 	def cramer_eq(self):
