@@ -170,7 +170,7 @@ class Perceptron():
 		d = []
 		z,zlist = self.feedforward()
 		a = self.activate(z)
-		d.append(self.cost_grad())
+		d.append(self.cost_grad(z))
 		
 		self.theta_grad = [np.zeros(shape = t.shape) for t in self.theta]
 		
