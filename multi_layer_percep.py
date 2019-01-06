@@ -215,12 +215,12 @@ class Perceptron():
 				self.theta[i] = self.theta[i] - (alpha*self.theta_grad[i])   #updating weights
 
 			i+=self.batch_size
-			if i+batch_size>self.m:
+			if i+self.batch_size>self.m:
 				break
 
 			for i in self.theta_grad:
 				cond = (np.abs(i)>stop)
-				if not cond.any():
+				if cond.any():
 					break
 			else:
 				print("Gradient is small so the process is stopped")
