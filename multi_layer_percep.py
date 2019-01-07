@@ -233,7 +233,7 @@ class Perceptron():
 		"""
 		d = []
 		z,zlist = self.feedforward()
-		a = self.activate(z)
+		
 		d.append(self.cost_grad(z))    #error at output(depends on the cost_function used)
 		
 		self.theta_grad = [np.zeros(shape = t.shape) for t in self.theta]  #initializing the gradients
