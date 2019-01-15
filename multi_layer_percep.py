@@ -273,7 +273,7 @@ class Perceptron():
 		Mini-Batch gradient descent
 		alpha is the learning rate
 		epochs is the number of iterations of the entire dataset
-		lam is the regularization factor
+		lam is the regularization factor by default it is zero
 		"""
 		self.lam = lam
 		self.batch_size = batch_size
