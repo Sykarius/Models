@@ -154,14 +154,16 @@ class Perceptron():
 	def sigmoid_cross_entropy(self):
 		z,_ = self.feedforward()
 		a = self.sigmoid(z)
-		self.cost = (-1/self.batch_size)*np.sum(self.by*np.log(a) + (1-self.by)*np.log(1 - a))
+		t_sum = sum([np.sum(t[:,1:]**2) for t in self.theta])   #Regularisation term
+		self.cost = (-1/self.batch_size)*np.sum(self.by*np.log(a) + (1-self.by)*np.log(1 - a)) + (self.lam/(2*self.batch_size))*t_sum
 
 	
 	
 	def sigmoid_squared_error(self):
 		z,_ = self.feedforward()
 		a = self.sigmoid(z)
-		self.cost = (1/(2*self.batch_size))*np.sum(self.by-a)**2
+		t_sum = sum([np.sum(t[:,1:]**2) for t in self.theta])   #Regularisation term
+		self.cost = (1/(2*self.batch_size))*np.sum(self.by-a)**2 + (self.lam/(2*self.batch_size))*t_sum
 
 	
 	
@@ -169,7 +171,8 @@ class Perceptron():
 		z,_ = self.feedforward()
 		a = np.exp(z)
 		a = a/np.sum(a,axis = 1)
-		self.cost = (-1/self.batch_size)*np.sum(self.by*np.log(a) + (1-self.by)*np.log(1 - a))
+		t_sum = sum([np.sum(t[:,1:]**2) for t in self.theta])   #Regularisation term
+		self.cost = (-1/self.batch_size)*np.sum(self.by*np.log(a) + (1-self.by)*np.log(1 - a)) + (self.lam/(2*self.batch_size))*t_sum
 
 
 	
@@ -233,7 +236,6 @@ class Perceptron():
 		"""
 		d = []
 		z,zlist = self.feedforward()
-		
 		d.append(self.cost_grad(z))    #error at output(depends on the cost_function used)
 		
 		self.theta_grad = [np.zeros(shape = t.shape) for t in self.theta]  #initializing the gradients
@@ -251,21 +253,29 @@ class Perceptron():
 			a = np.hstack(ao,a)
 			self.theta_grad[i] = self.theta_grad[i] + np.dot(np.transpose(d[i]),a)  #gradient calculation of all the other weights
 
+
+		#Regularisation
+
+		for i in range(len(self.theta_grad)):
+			self.theta_grad[i][:,1:]+=(self.lam*self.theta[:,1:])
+
+
 		self.theta_grad = [(1/self.batch_size)*tg for tg in self.theta_grad]
 
 
 
 
 
-
-	def train(self, alpha = 0.01, batch_size = 100,epochs = 10):
+	def train(self, alpha = 0.01, batch_size = 100,epochs = 10,lam = 0):
 		"""
 		Traines the network
 		Split to batches
 		Mini-Batch gradient descent
 		alpha is the learning rate
 		epochs is the number of iterations of the entire dataset
+		lam is the regularization factor
 		"""
+		self.lam = lam
 		self.batch_size = batch_size
 		self.init_weights()
 		
